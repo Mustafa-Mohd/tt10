@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Travel Top 10 Design System - All colors, gradients, fonts, etc defined here. 
+All colors MUST be HSL. Beautiful travel-themed design tokens.
+*/
+
+@layer base {
+  :root {
+    /* Travel-themed color palette */
+    --background: 210 25% 98%;
+    --foreground: 215 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    /* Red primary theme */
+    --primary: 4 85% 62%;        /* #EF4B4B */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 4 70% 70%;
+
+    /* Sandy secondary theme */
+    --secondary: 35 45% 92%;
+    --secondary-foreground: 215 25% 15%;
+
+    /* Sky muted theme */
+    --muted: 210 25% 95%;
+    --muted-foreground: 215 15% 55%;
+
+    /* Sunset accent theme */
+    --accent: 25 85% 55%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 25 85% 75%;
+
+    /* Success green for certified badges */
+    --success: 145 85% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 210 25% 88%;
+    --input: 210 25% 95%;
+    --ring: 4 85% 62%;
+
+    /* Travel-specific design tokens */
+    --hero-gradient: linear-gradient(135deg, hsl(4 85% 62%) 0%, hsl(4 70% 50%) 100%);
+    --card-gradient: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(4 85% 62% / 0.05%) 100%);
+    --ocean-gradient: linear-gradient(180deg, hsl(4 70% 70%) 0%, hsl(4 85% 62%) 100%);
+    --sunset-gradient: linear-gradient(90deg, hsl(4 85% 62%) 0%, hsl(4 70% 50%) 100%);
+    
+    /* Elegant shadows with travel theme colors */
+    --shadow-soft: 0 2px 8px hsl(215 25% 15% / 0.08);
+    --shadow-medium: 0 4px 16px hsl(215 25% 15% / 0.12);
+    --shadow-large: 0 8px 32px hsl(215 25% 15% / 0.16);
+    --shadow-ocean: 0 8px 32px hsl(4 85% 62% / 0.2);
+    --shadow-sunset: 0 8px 32px hsl(25 85% 55% / 0.2);
+
+    /* Smooth animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark theme with travel ambiance */
+    --background: 215 25% 8%;
+    --foreground: 210 25% 95%;
+
+    --card: 215 25% 10%;
+    --card-foreground: 210 25% 95%;
+
+    --popover: 215 25% 10%;
+    --popover-foreground: 210 25% 95%;
+
+    --primary: 4 85% 62%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 4 70% 70%;
+
+    --secondary: 215 25% 15%;
+    --secondary-foreground: 210 25% 95%;
+
+    --muted: 215 25% 15%;
+    --muted-foreground: 215 15% 65%;
+
+    --accent: 25 85% 65%;
+    --accent-foreground: 215 25% 8%;
+    --accent-glow: 25 85% 85%;
+
+    --success: 145 85% 55%;
+    --success-foreground: 215 25% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 25% 20%;
+    --input: 215 25% 15%;
+    --ring: 4 85% 62%;
+
+    /* Dark theme gradients */
+    --hero-gradient: linear-gradient(135deg, hsl(4 85% 45%) 0%, hsl(4 70% 35%) 100%);
+    --card-gradient: linear-gradient(145deg, hsl(215 25% 10%) 0%, hsl(4 85% 62% / 0.05) 100%);
+    --ocean-gradient: linear-gradient(180deg, hsl(4 70% 70%) 0%, hsl(4 85% 45%) 100%);
+    --sunset-gradient: linear-gradient(90deg, hsl(4 85% 45%) 0%, hsl(4 70% 35%) 100%);
+    
+    --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.2);
+    --shadow-medium: 0 4px 16px hsl(0 0% 0% / 0.3);
+    --shadow-large: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --shadow-ocean: 0 8px 32px hsl(4 85% 45% / 0.3);
+    --shadow-sunset: 0 8px 32px hsl(25 85% 45% / 0.3);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-medium;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Hero section styles */
+  .hero-gradient {
+    background: var(--hero-gradient);
+  }
+  
+  .card-gradient {
+    background: var(--card-gradient);
+  }
+  
+  .ocean-gradient {
+    background: var(--ocean-gradient);
+  }
+  
+  .sunset-gradient {
+    background: var(--sunset-gradient);
+  }
+
+  /* Custom shadows */
+  .shadow-travel {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-travel-md {
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .shadow-travel-lg {
+    box-shadow: var(--shadow-large);
+  }
+  
+  .shadow-ocean {
+    box-shadow: var(--shadow-ocean);
+  }
+  
+  .shadow-sunset {
+    box-shadow: var(--shadow-sunset);
+  }
+
+  /* Smooth transitions */
+  .transition-travel {
+    transition: var(--transition-smooth);
+  }
+  
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+
+  /* Travel-specific animations */
+  .hover-lift {
+    @apply transition-travel hover:transform hover:-translate-y-2 hover:shadow-travel-lg;
+  }
+  
+  .hover-glow {
+    @apply transition-travel hover:shadow-ocean;
+  }
+
+  /* Glassmorphism effect */
+  .glass {
+    backdrop-filter: blur(16px);
+    background: hsl(var(--background) / 0.8);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+}
