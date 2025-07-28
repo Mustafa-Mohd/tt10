@@ -1,16 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { 
-  Mail, 
-  MapPin, 
-  Phone, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
+import {
+  Mail,
+  MapPin,
+  Phone,
+  Facebook,
+  Twitter,
+  Instagram,
   Youtube,
   Send,
   ExternalLink
 } from 'lucide-react';
+import logoImg from '/assets/logo.png'; // M ake sure this path is correct
 
 const Footer = () => {
   const quickLinks = [
@@ -43,13 +45,6 @@ const Footer = () => {
     { icon: Youtube, href: '#youtube', label: 'YouTube' }
   ];
 
-  const instagramPosts = [
-    { id: 1, image: '/api/placeholder/100/100', alt: 'Sunset beach' },
-    { id: 2, image: '/api/placeholder/100/100', alt: 'Mountain view' },
-    { id: 3, image: '/api/placeholder/100/100', alt: 'City skyline' },
-    { id: 4, image: '/api/placeholder/100/100', alt: 'Travel guide' }
-  ];
-
   return (
     <footer className="bg-foreground text-background">
       {/* Main Footer */}
@@ -58,32 +53,35 @@ const Footer = () => {
           
           {/* Company Info */}
           <div className="space-y-6">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 ocean-gradient rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">T</span>
-                </div>
-                <span className="text-xl font-bold">Travel Top 10</span>
-              </div>
-              <p className="text-background/80 text-sm leading-relaxed">
-                Connecting travelers with the world's top-rated travel professionals. 
-                Discover, compare, and book with confidence through our certified network.
-              </p>
+            <div className="mb-4">
+              <Link to="/" className="flex items-center space-x-2">
+                <img
+                  src={logoImg}
+                  alt="Travel Top 10 Logo"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <span className="text-xl font-bold">
+                  <span style={{ color: '#0F0F0F' }}>TRAVEL </span>
+                  <span style={{ color: '#f04a4a' }}>TOP10</span>
+                </span>
+              </Link>
             </div>
+            <p className="text-background/80 text-sm leading-relaxed">
+              Connecting travelers with the world's top-rated travel professionals.
+              Discover, compare, and book with confidence through our certified network.
+            </p>
 
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-primary" />
-                <span className="text-sm">hello@traveltop10.com</span>
+                <span className="text-sm">contact@traveltop10.in</span>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span className="text-sm">123 Travel Street, Explorer City, TC 12345</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-primary" />
-                <span className="text-sm">+1 (555) 123-TRAVEL</span>
+                <span className="text-sm">
+                  # 3-6 365, Himayatnagar, Hyderabad, Telangana 500029
+                </span>
               </div>
             </div>
 
@@ -111,7 +109,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <a 
+                  <a
                     href={link.href}
                     className="text-background/80 hover:text-primary transition-travel text-sm flex items-center gap-2 group"
                   >
@@ -129,7 +127,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {topCategories.map((category, index) => (
                 <li key={index}>
-                  <a 
+                  <a
                     href={category.href}
                     className="text-background/80 hover:text-primary transition-travel text-sm flex items-center gap-2 group"
                   >
@@ -141,15 +139,14 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter & Instagram */}
+          {/* Newsletter */}
           <div className="space-y-6">
-            {/* Newsletter */}
             <div>
               <h3 className="text-lg font-bold mb-4">Stay Updated</h3>
               <p className="text-background/80 text-sm mb-4">
                 Get the latest travel trends, exclusive deals, and certification updates.
               </p>
-              
+
               <div className="space-y-3">
                 <div className="flex gap-2">
                   <input
@@ -166,24 +163,6 @@ const Footer = () => {
                 </p>
               </div>
             </div>
-
-            {/* Instagram Preview */}
-            <div>
-              <h4 className="font-semibold mb-3">Latest from Instagram</h4>
-              <div className="grid grid-cols-2 gap-2">
-                {instagramPosts.map((post) => (
-                  <div 
-                    key={post.id}
-                    className="aspect-square bg-background/10 rounded-lg overflow-hidden hover:bg-background/20 transition-travel cursor-pointer"
-                  >
-                    {/* Placeholder for Instagram images */}
-                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                      <Instagram className="h-6 w-6 text-background/60" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -194,7 +173,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Copyright */}
             <div className="text-sm text-background/80">
-              © 2024 Travel Top 10. All rights reserved.
+              © 2024 Travel Top10. All rights reserved.
             </div>
 
             {/* Legal Links */}
