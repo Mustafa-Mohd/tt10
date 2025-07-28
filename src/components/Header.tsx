@@ -42,15 +42,19 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 ocean-gradient rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">T</span>
+          <div className="mb-4">
+              <Link to="/" className="flex items-center space-x-2">
+                <img
+                  src="/assets/logo.png"
+                  alt="Travel Top 10 Logo"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <span className="text-xl font-bold">
+                  <span style={{ color: '#0F0F0F' }}>TRAVEL </span>
+                  <span style={{ color: '#f04a4a' }}>TOP10</span>
+                </span>
+              </Link>
             </div>
-            <span className="text-xl font-bold">
-              <span style={{ color: '#0F0F0F' }}>TRAVEL </span>
-              <span style={{ color: '#EF4B4B' }}>TOP10</span>
-            </span>
-          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
