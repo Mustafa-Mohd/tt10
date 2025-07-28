@@ -1,3 +1,33 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+.skeleton-loader {
+  background: #eee;
+  border-radius: 8px;
+  min-height: 120px;
+  width: 100%;
+}
+
+/* Nav bar smooth hide/show */
+header {
+  will-change: opacity, transform, height;
+}
+
+@media (max-width: 768px) {
+  .touch-target {
+    min-height: 48px;
+    padding: 12px 0;
+  }
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +69,9 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.sidebar-scroll-fadein {
+  scroll-behavior: smooth;
+  animation: fadeIn 0.5s;
 }

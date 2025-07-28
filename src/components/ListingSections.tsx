@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import ListingCard from './ListingCard';
 import { ArrowRight, Building2, Hotel, Users, Video } from 'lucide-react';
@@ -179,6 +179,32 @@ const ListingSections = () => {
     }
   ];
 
+  const [visibleCount, setVisibleCount] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  const loadMore = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setVisibleCount((c) => c + 10);
+      setLoading(false);
+    }, 500); // Simulate network delay
+  }, []);
+
+  useEffect(() => {
+    if (!loaderRef.current) return;
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) {
+          loadMore();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [loadMore, loading]);
+
   return (
     <div className="py-20 bg-gradient-to-b from-secondary/30 to-background">
       <div className="container mx-auto px-4">
@@ -199,7 +225,7 @@ const ListingSections = () => {
 
               {/* Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                {section.data.map((item, index) => (
+                {section.data.slice(0, visibleCount).map((item, index) => (
                   <ListingCard key={index} {...item} />
                 ))}
               </div>
@@ -211,6 +237,8 @@ const ListingSections = () => {
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </div>
+              <div ref={loaderRef} />
+              {loading && <div className="skeleton-loader my-4 fade-in" />}
             </section>
           );
         })}
