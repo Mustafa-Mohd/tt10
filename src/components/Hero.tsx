@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Star, Users, Globe } from 'lucide-react';
 import heroVideo from '@/assets/Cinematic_Travel_Video_Generation_Complete.mp4';
 
-const Hero = () => {
+const Hero = (props) => {
   const trustBadges = [
     { icon: Star, text: '4.9/5 Rating', count: '2,000+ Reviews' },
     { icon: Users, text: '50,000+ Users', count: 'Worldwide' },
     { icon: Globe, text: '150+ Countries', count: 'Covered' },
   ];
+
+  const [isVisible, setIsVisible] = useState(false);
+  const imgRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: '200px' }
+    );
+    if (imgRef.current) observer.observe(imgRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

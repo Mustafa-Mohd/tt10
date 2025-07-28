@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Star, MapPin, Award, ExternalLink, Play } from 'lucide-react';
 
@@ -47,15 +47,32 @@ const ListingCard: React.FC<ListingCardProps> = ({
     }
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+  const imgRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: '200px' }
+    );
+    if (imgRef.current) observer.observe(imgRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="card-gradient rounded-xl shadow-travel border border-border hover-lift overflow-hidden group">
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
-        <img 
-          src={image} 
-          alt={title}
-          className="w-full h-full object-cover transition-travel group-hover:scale-105"
-        />
+        <div ref={imgRef} className="w-full h-48 flex items-center justify-center">
+          {isVisible ? (
+            <img src={image} alt={title} className="fade-in w-full h-full object-cover" loading="lazy" />
+          ) : (
+            <div className="skeleton-loader" />
+          )}
+          <noscript>
+            <img src={image} alt={title} className="w-full h-full object-cover" />
+          </noscript>
+        </div>
         
         {/* Overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
