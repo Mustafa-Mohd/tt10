@@ -118,11 +118,7 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Link to="/login">
-                  <Button variant="ghost" size="sm">
-                    Login
-                  </Button>
-                </Link>
+                
                 <Link to="/register">
                   <Button variant="ocean" size="sm">
                     Register

@@ -37,6 +37,10 @@ const AdminLogin = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <h1>
+              username:workmohommedmustafa2k4@gmail.com
+              password:murtaja@123
+            </h1>
             <input
               type="email"
               placeholder="Admin Email"

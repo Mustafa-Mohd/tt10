@@ -39,10 +39,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: '#facebook', label: 'Facebook' },
-    { icon: Twitter, href: '#twitter', label: 'Twitter' },
-    { icon: Instagram, href: '#instagram', label: 'Instagram' },
-    { icon: Youtube, href: '#youtube', label: 'YouTube' }
+    { icon: Facebook, href: 'https://facebook.com/Top10Travel', label: 'Facebook' },
+    { icon: Twitter, href: 'https://x.com/traveltop_10', label: 'Twitter' },
+    { icon: Instagram, href: 'https://instagram.com/traveltop10.in', label: 'Instagram' },
+    { icon: Youtube, href: 'https://youtube.com/@traveltop10', label: 'YouTube' }
   ];
 
   return (
@@ -173,7 +173,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Copyright */}
             <div className="text-sm text-background/80">
-              © 2024 Travel Top10. All rights reserved.
+              © 2025 Travel Top10. All rights reserved.
             </div>
 
             {/* Legal Links */}
