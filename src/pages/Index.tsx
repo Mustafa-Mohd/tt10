@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import SearchFilter from '@/components/SearchFilter';
+// import SearchFilter from '@/components/SearchFilter';
 import ListingSections from '@/components/ListingSections';
-import NoResults from '@/components/NoResults';
-import Stats from '@/components/Stats';
+
+
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import AboutSection from '@/components/AboutSection';
-// @ts-expect-error - HowWeWorkSection module not found
 import HowWeWorkSection from '@/components/HowWeWorkSection';
 import ContactSection from '@/components/ContactFormModal';
 import TermsSection from '@/components/TermsSection';
@@ -40,10 +39,10 @@ const Index = () => {
         <Hero />
         
         {/* Search & Filter Bar */}
-        <SearchFilter />
+        {/* <SearchFilter /> */}
         
         {/* Listing Sections */}
-        <ListingSections />
+        {/* <ListingSections /> */}
         {/* About section */}
         <AboutSection/>
         {/* How we work section */}
@@ -69,11 +68,9 @@ const Index = () => {
 
        
         
-        {/* No Results Section (shown conditionally) */}
-        {/* <NoResults /> */}
+       
         
-        {/* Stats Section */}
-        <Stats />
+        
       </main>
       
       {/* Footer */}

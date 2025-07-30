@@ -1,9 +1,10 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquare, Send, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/AuthProvider';
 
 const Contact = () => {
@@ -21,27 +22,31 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .insert([{
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
           user_id: user?.id || null,
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          status: 'unread'
-        }]);
+        }),
+      });
 
-      if (error) {
-        console.error('Error submitting contact form:', error);
-        toast.error('Failed to send message. Please try again.');
-      } else {
-        toast.success('Message sent successfully! We\'ll get back to you soon.');
-        setFormData({ name: '', email: '', subject: '', message: '' });
+      if (!response.ok) {
+        let msg = 'Failed to send message';
+        try {
+          const data = await response.json();
+          if (data?.error) msg = data.error;
+        } catch (_) {}
+        throw new Error(msg);
       }
-    } catch (error) {
-      console.error('Error submitting contact form:', error);
-      toast.error('Failed to send message. Please try again.');
+
+      toast.success('Message sent successfully!');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+
+    } catch (error: any) {
+      toast.error(error.message || 'Submission failed.');
     } finally {
       setIsSubmitting(false);
     }
@@ -50,7 +55,7 @@ const Contact = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -141,8 +146,8 @@ const Contact = () => {
                 />
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className={`w-full transition-all duration-300 ${isSubmitting ? 'skeleton-loader' : ''}`}
                 disabled={isSubmitting}
               >
