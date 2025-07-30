@@ -62,7 +62,7 @@ const Footer = () => {
                 />
                 <span className="text-xl font-bold">
                   <span style={{ color: '#0F0F0F' }}>TRAVEL </span>
-                  <span style={{ color: '#f04a4a' }}>TOP10</span>
+                  <span style={{ color: '#EF4B4B' }}>TOP10</span>
                 </span>
               </Link>
             </div>
