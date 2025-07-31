@@ -172,11 +172,7 @@ const Header = () => {
                   </>
                 ) : (
                   <>
-                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                      <Button variant="ghost" size="sm" className="justify-start w-full">
-                        Login
-                      </Button>
-                    </Link>
+                    
                     <Link to="/register" onClick={() => setIsMenuOpen(false)}>
                       <Button variant="ocean" size="sm" className="justify-start w-full">
                         Register

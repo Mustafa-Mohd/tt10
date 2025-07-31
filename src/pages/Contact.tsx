@@ -1,11 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquare, Send, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/components/AuthProvider';
+import ReCAPTCHA from 'react-google-recaptcha';
+
+// ✅ Visible checkbox reCAPTCHA — get from Google v2 keys
+const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY!;
 
 const Contact = () => {
   const { user } = useAuth();
@@ -13,14 +17,25 @@ const Contact = () => {
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  const handleCaptcha = (token: string | null) => {
+    setCaptchaToken(token);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
+    if (!captchaToken) {
+      toast.error('Please complete the CAPTCHA verification.');
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -30,6 +45,7 @@ const Contact = () => {
         body: JSON.stringify({
           ...formData,
           user_id: user?.id || null,
+          captchaToken,
         }),
       });
 
@@ -44,7 +60,8 @@ const Contact = () => {
 
       toast.success('Message sent successfully!');
       setFormData({ name: '', email: '', subject: '', message: '' });
-
+      setCaptchaToken(null);
+      recaptchaRef.current?.reset();
     } catch (error: any) {
       toast.error(error.message || 'Submission failed.');
     } finally {
@@ -52,12 +69,21 @@ const Contact = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+
+  const isFormValid =
+    formData.name.trim() &&
+    formData.email.trim() &&
+    formData.subject &&
+    formData.message.trim() &&
+    captchaToken;
 
   return (
     <div className="min-h-screen bg-red-50 flex items-center justify-center px-4 py-16">
@@ -146,10 +172,19 @@ const Contact = () => {
                 />
               </div>
 
+              {/* ✅ VISIBLE CAPTCHA CHECKBOX */}
+              <div className="flex justify-center">
+                <ReCAPTCHA
+                  sitekey={SITE_KEY}
+                  onChange={handleCaptcha}
+                  ref={recaptchaRef}
+                />
+              </div>
+
               <Button
                 type="submit"
-                className={`w-full transition-all duration-300 ${isSubmitting ? 'skeleton-loader' : ''}`}
-                disabled={isSubmitting}
+                className="w-full transition-all duration-300"
+                disabled={!isFormValid || isSubmitting}
               >
                 {isSubmitting ? (
                   <CheckCircle className="h-4 w-4 mr-2 animate-spin" />
