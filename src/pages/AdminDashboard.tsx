@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import { Users, Building2, MapPin, Award, Plus, Edit, Trash2, Eye, MessageSquare, Mail } from 'lucide-react';
+import { Users, Building2, MapPin, Award, Plus, Edit, Trash2, Eye, MessageSquare, Mail, RefreshCw } from 'lucide-react';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 interface Listing {
@@ -81,6 +82,7 @@ const AdminDashboard = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [cmsContent, setCmsContent] = useState<CMSContent[]>([]);
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
+  const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({
     totalListings: 0,
     totalUsers: 0,
@@ -96,6 +98,23 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
+      console.log('Fetching data from Supabase...');
+      
+      // Test Supabase connection first
+      const { data: testData, error: testError } = await supabase
+        .from('contact_messages')
+        .select('count')
+        .limit(1);
+      
+      if (testError) {
+        console.error('Supabase connection test failed:', testError);
+        toast.error('Database connection failed');
+        return;
+      }
+      
+      console.log('Supabase connection successful');
+      
       // Fetch listings
       const { data: listingsData, error: listingsError } = await supabase
         .from('listings')
@@ -144,13 +163,22 @@ const AdminDashboard = () => {
 
       if (contactError) {
         console.error('Error fetching contact messages:', contactError);
+        toast.error('Failed to fetch contact messages');
+      } else {
+        console.log('Contact messages fetched successfully:', contactData?.length || 0, 'messages');
       }
 
       setListings(listingsData || []);
       setProfiles(profilesData || []);
       setCertificates(certificatesData || []);
       setCmsContent(cmsData || []);
-      setContactMessages(contactData || []);
+      // Sort messages: unread first, then by date (newest first)
+      const sortedMessages = (contactData || []).sort((a, b) => {
+        if (a.status === 'unread' && b.status !== 'unread') return -1;
+        if (a.status !== 'unread' && b.status === 'unread') return 1;
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      });
+      setContactMessages(sortedMessages);
 
       // Update stats
       setStats({
@@ -164,6 +192,8 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to fetch dashboard data');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -220,18 +250,177 @@ const AdminDashboard = () => {
 
   const markMessageAsRead = async (id: string) => {
     try {
-      const { error } = await supabase
+      console.log('=== MARK AS READ OPERATION START ===');
+      console.log('Message ID:', id);
+      
+      // First, let's check if we can read the message
+      console.log('Step 1: Reading current message...');
+      const { data: readData, error: readError } = await supabase
+        .from('contact_messages')
+        .select('*')
+        .eq('id', id)
+        .single();
+      
+      if (readError) {
+        console.error('❌ Error reading message:', readError);
+        toast.error(`Cannot read message: ${readError.message}`);
+        return;
+      }
+      
+      console.log('✅ Current message data:', readData);
+      console.log('Current status:', readData.status);
+      
+      // Now try to update
+      console.log('Step 2: Attempting to update status to "read"...');
+      const { data, error } = await supabase
         .from('contact_messages')
         .update({ status: 'read' })
-        .eq('id', id);
+        .eq('id', id)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Supabase update error:', error);
+        console.error('Error message:', error.message);
+        console.error('Error details:', error.details);
+        console.error('Error hint:', error.hint);
+        toast.error(`Update failed: ${error.message}`);
+        return;
+      }
       
+      console.log('✅ Update successful:', data);
+      console.log('Updated status:', data[0]?.status);
       toast.success('Message marked as read');
-      fetchData();
+      
+      // Refresh the data immediately
+      console.log('Step 3: Refreshing data...');
+      await fetchData();
+      console.log('=== MARK AS READ OPERATION END ===');
+    } catch (error) {
+      console.error('❌ Unexpected error:', error);
+      toast.error('Failed to update message. Please try again.');
+    }
+  };
+
+  const markMessageAsUnread = async (id: string) => {
+    try {
+      console.log('Marking message as unread:', id);
+      
+      const { data, error } = await supabase
+        .from('contact_messages')
+        .update({ status: 'unread' })
+        .eq('id', id)
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Update successful:', data);
+      toast.success('Message marked as unread');
+      
+      // Refresh the data immediately
+      await fetchData();
     } catch (error) {
       console.error('Error updating message status:', error);
-      toast.error('Failed to update message');
+      toast.error('Failed to update message. Please try again.');
+    }
+  };
+
+  const deleteMessage = async (id: string) => {
+    try {
+      console.log('Deleting message:', id);
+      
+      const { data, error } = await supabase
+        .from('contact_messages')
+        .delete()
+        .eq('id', id)
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Delete successful:', data);
+      toast.success('Message deleted successfully');
+      
+      // Refresh the data immediately
+      await fetchData();
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      toast.error('Failed to delete message. Please try again.');
+    }
+  };
+
+  const testConnection = async () => {
+    try {
+      console.log('=== CONNECTION TEST START ===');
+      
+      // Test 1: Basic connection and read
+      console.log('Test 1: Reading messages...');
+      const { data: readData, error: readError } = await supabase
+        .from('contact_messages')
+        .select('*')
+        .limit(5);
+      
+      if (readError) {
+        console.error('❌ Read test failed:', readError);
+        toast.error(`Read failed: ${readError.message}`);
+        return false;
+      }
+      
+      console.log('✅ Read test successful:', readData?.length || 0, 'messages found');
+      console.log('Sample messages:', readData?.slice(0, 2));
+      
+      // Test 2: Try to update a message (if we have any)
+      if (readData && readData.length > 0) {
+        const testMessage = readData[0];
+        console.log('Test 2: Testing update on message:', testMessage.id);
+        console.log('Current status:', testMessage.status);
+        
+        const newStatus = testMessage.status === 'read' ? 'unread' : 'read';
+        console.log('Attempting to change status to:', newStatus);
+        
+        const { data: updateData, error: updateError } = await supabase
+          .from('contact_messages')
+          .update({ status: newStatus })
+          .eq('id', testMessage.id)
+          .select();
+        
+        if (updateError) {
+          console.error('❌ Update test failed:', updateError);
+          console.error('Error details:', updateError.message, updateError.details);
+          toast.error(`Update failed: ${updateError.message}`);
+          return false;
+        }
+        
+        console.log('✅ Update test successful:', updateData);
+        console.log('New status:', updateData[0]?.status);
+        
+        // Revert the change
+        console.log('Test 3: Reverting change...');
+        const { error: revertError } = await supabase
+          .from('contact_messages')
+          .update({ status: testMessage.status })
+          .eq('id', testMessage.id);
+        
+        if (revertError) {
+          console.error('❌ Revert failed:', revertError);
+        } else {
+          console.log('✅ Revert successful');
+        }
+      } else {
+        console.log('⚠️ No messages found to test update');
+      }
+      
+      console.log('=== CONNECTION TEST END ===');
+      toast.success('Database connection and permissions working');
+      return true;
+    } catch (error) {
+      console.error('❌ Connection test error:', error);
+      toast.error('Connection test failed');
+      return false;
     }
   };
 
@@ -503,7 +692,35 @@ const AdminDashboard = () => {
           {/* Messages Tab */}
           <TabsContent value="messages">
             <div className="mb-8">
-              <h2 className="text-2xl font-bold mb-4">Contact Form Submissions</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Contact Form Submissions</h2>
+                <div className="flex gap-2 items-center">
+                  <Badge variant="outline" className="text-sm">
+                    Total: {contactMessages.length}
+                  </Badge>
+                  <Badge variant="destructive" className="text-sm">
+                    Unread: {contactMessages.filter(m => m.status === 'unread').length}
+                  </Badge>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={fetchData}
+                    className="ml-2"
+                    disabled={loading}
+                  >
+                    <RefreshCw className={`w-4 h-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
+                    {loading ? 'Loading...' : 'Refresh'}
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="secondary" 
+                    onClick={testConnection}
+                    className="ml-2"
+                  >
+                    Test Connection
+                  </Button>
+                </div>
+              </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-border">
                   <thead>
@@ -534,11 +751,52 @@ const AdminDashboard = () => {
                           <span className="text-xs text-muted-foreground">{new Date(message.created_at).toLocaleTimeString()}</span>
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap">
-                          {message.status === 'unread' && (
-                            <Button size="sm" onClick={() => markMessageAsRead(message.id)}>
-                              Mark as Read
-                            </Button>
-                          )}
+                          <div className="flex gap-2">
+                            {message.status === 'unread' ? (
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => markMessageAsRead(message.id)}
+                              >
+                                Mark as Read
+                              </Button>
+                            ) : (
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => markMessageAsUnread(message.id)}
+                              >
+                                Mark as Unread
+                              </Button>
+                            )}
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button 
+                                  size="sm" 
+                                  variant="destructive"
+                                >
+                                  Delete
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Message</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete this message from {message.name}? This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction 
+                                    onClick={() => deleteMessage(message.id)}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
                         </td>
                       </tr>
                     ))}
