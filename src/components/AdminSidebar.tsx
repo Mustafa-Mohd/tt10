@@ -87,7 +87,7 @@ export function AdminSidebar() {
           </div>
           {!collapsed && (
             <div>
-              <h2 className="text-lg font-bold text-foreground">Travel Top 10</h2>
+              <h2 className="text-lg font-bold text-foreground">Travel Top10</h2>
               <p className="text-xs text-muted-foreground">Admin Panel</p>
             </div>
           )}

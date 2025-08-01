@@ -435,7 +435,7 @@ const AdminDashboard = () => {
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-4xl font-bold text-foreground mb-2">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Manage your Travel Top 10 platform</p>
+            <p className="text-muted-foreground">Manage your Travel Top10 platform</p>
           </div>
           <Button variant="outline" onClick={handleLogout}>Logout</Button>
         </div>

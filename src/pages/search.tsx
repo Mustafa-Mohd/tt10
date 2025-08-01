@@ -40,7 +40,7 @@ const SearchPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Search Travel Top 10</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Search Travel Top10</h1>
 
         <div className="flex gap-2 mb-8">
           <Input

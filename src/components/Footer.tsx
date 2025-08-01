@@ -57,18 +57,17 @@ const Footer = () => {
               <Link to="/" className="flex items-center space-x-2">
                 <img
                   src={logoImg}
-                  alt="Travel Top 10 Logo"
+                  alt="Travel Top10 Logo"
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <span className="text-xl font-bold">
-                  <span style={{ color: '#0F0F0F' }}>TRAVEL </span>
+                  <span style={{ color: '#FFFFFF' }}>TRAVEL </span>
                   <span style={{ color: '#EF4B4B' }}>TOP10</span>
                 </span>
               </Link>
             </div>
             <p className="text-background/80 text-sm leading-relaxed">
-              Connecting travelers with the world's top-rated travel professionals.
-              Discover, compare, and book with confidence through our certified network.
+            When the best come together, travel becomes extraordinary
             </p>
 
             {/* Contact Info */}
@@ -77,12 +76,7 @@ const Footer = () => {
                 <Mail className="h-4 w-4 text-primary" />
                 <span className="text-sm">contact@traveltop10.in</span>
               </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="h-4 w-4 text-primary" />
-                <span className="text-sm">
-                  # 3-6 365, Himayatnagar, Hyderabad, Telangana 500029
-                </span>
-              </div>
+              
             </div>
 
             {/* Social Links */}

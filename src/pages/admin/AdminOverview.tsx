@@ -166,7 +166,7 @@ export default function AdminOverview() {
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back! Here's what's happening with your Travel Top 10 platform.
+          Welcome back! Here's what's happening with your Travel Top10 platform.
         </p>
       </div>
 

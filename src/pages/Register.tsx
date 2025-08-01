@@ -40,7 +40,7 @@ const Register = () => {
       <Card className="w-full max-w-md card-gradient border border-border shadow-travel">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-foreground">Create Account</CardTitle>
-          <p className="text-muted-foreground">Join Travel Top 10 today</p>
+          <p className="text-muted-foreground">Join Travel Top10 today</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

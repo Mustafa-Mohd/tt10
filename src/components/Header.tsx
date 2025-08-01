@@ -46,7 +46,7 @@ const Header = () => {
               <Link to="/" className="flex items-center space-x-2">
                 <img
                   src="/assets/logo.png"
-                  alt="Travel Top 10 Logo"
+                  alt="Travel Top10 Logo"
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <span className="text-xl font-bold">

@@ -42,12 +42,12 @@ export const generateUserAcknowledgmentEmail = (data: {
                 <table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;">
                   <tr>
                     <td align="center" style="background: #ef7c7c; padding:15px; border-radius:8px; color:#ffffff; font-weight:bold;">
-                      Trap Travel Top 10 Discoveries in Your Best Travel Destination
+                      When the best come together, travel becomes extraordinary.
                     </td>
                   </tr>
                 </table>
 
-                <p style="font-size:15px; color:#666;">Discover India's hidden gems, popular destinations, and create unforgettable memories with our curated travel guides.</p>
+                <p style="font-size:15px; color:#666;">To Build the Strongest Network of Trusted Travel Brands That Deliver Flawless Experiences</p>
 
                 <!-- Message Details -->
                 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafe; border-radius:10px; padding:20px; border:1px solid #e1f5fe; margin:20px 0;">
